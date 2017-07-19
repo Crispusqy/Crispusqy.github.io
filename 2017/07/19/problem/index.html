@@ -6,14 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Crispus</title>
+  <title>problem | Crispus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Crispus">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="#RecycleView中的多item加载报空指针异常package com.chrisbus.projibu.component; import android.content.Context;import android.support.v7.widget.CardView;import android.support.v7.widget.RecyclerView;import android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="problem">
+<meta property="og:url" content="http://yoursite.com/2017/07/19/problem/index.html">
 <meta property="og:site_name" content="Crispus">
+<meta property="og:description" content="#RecycleView中的多item加载报空指针异常package com.chrisbus.projibu.component; import android.content.Context;import android.support.v7.widget.CardView;import android.support.v7.widget.RecyclerView;import android">
+<meta property="og:updated_time" content="2017-07-19T07:47:20.141Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Crispus">
+<meta name="twitter:title" content="problem">
+<meta name="twitter:description" content="#RecycleView中的多item加载报空指针异常package com.chrisbus.projibu.component; import android.content.Context;import android.support.v7.widget.CardView;import android.support.v7.widget.RecyclerView;import android">
   
     <link rel="alternative" href="/atom.xml" title="Crispus" type="application/atom+xml">
   
@@ -153,76 +157,190 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-problem" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      problem
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/19/problem/" class="archive-article-date">
+
+        
+        <a href="/2017/07/19/problem/" class="archive-article-date">
   	<time datetime="2017-07-19T07:41:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-19</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/19/problem/">problem</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#RecycleView中的多item加载报空指针异常<br>package com.chrisbus.projibu.component;</p>
+<p>import android.content.Context;<br>import android.support.v7.widget.CardView;<br>import android.support.v7.widget.RecyclerView;<br>import android.view.LayoutInflater;<br>import android.view.View;<br>import android.view.ViewGroup;</p>
+<p>import android.widget.TextView;</p>
+<p>import com.chrisbus.projibu.R;</p>
+<p>public class JibuAdapter extends RecyclerView.Adapter<recyclerview.viewholder> {</recyclerview.viewholder></p>
+<p>   private  StepArcView term;<br>    //建立枚举 2个item 类型<br>    public enum ITEM_TYPE {<br>        ITEM1,<br>        ITEM2<br>    }</p>
+<pre><code>@Override
+public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parents, int viewType) {
+</code></pre><p>//加载Item View的时候根据不同TYPE加载不同的布局<br>        if (viewType == ITEM_TYPE.ITEM1.ordinal()) {<br>            return new Item1ViewHolder(LayoutInflater.from(parents.getContext()).inflate(R.layout.list_item, parents, false));<br>        } else {<br>            return new Item2ViewHolder(LayoutInflater.from(parents.getContext()).inflate(R.layout.list_item2, parents, false));<br>        }<br>//没有用inflate加载过的要用from方法<br>    }</p>
+<pre><code>@Override
+public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder instanceof Item1ViewHolder) {
+        ((Item1ViewHolder) holder).term.setCurrentCount(90, 10);
+    } else if (holder instanceof Item2ViewHolder) {
+        ((Item2ViewHolder) holder).myview.setText(&quot;ddad&quot;);
+    }
 
-        <div class="article-info info-on-right">
-          
-          
 
+
+}
+
+//设置ITEM类型，可以自由发挥，这里设置item position单数显示item1 偶数显示item2
+@Override
+public int getItemViewType(int position) {
+</code></pre><p>//Enum类提供了一个ordinal()方法，返回枚举类型的序数，这里ITEM_TYPE.ITEM1.ordinal()代表0， ITEM_TYPE.ITEM2.ordinal()代表1<br>        return position % 2 == 0 ? ITEM_TYPE.ITEM1.ordinal() : ITEM_TYPE.ITEM2.ordinal();<br>    }</p>
+<pre><code>@Override
+public int getItemCount() {
+    return 2;
+}
+
+//item1 的ViewHolder
+public static class Item1ViewHolder extends RecyclerView.ViewHolder {//用VIEWHOLDER对已经加载过的进行缓存
+       CardView myview;
+       StepArcView term;
+
+    public Item1ViewHolder(View itemView) {
+        super(itemView);
+        myview = (CardView) itemView.findViewById(R.layout.list_item);
+        term = (StepArcView) itemView.findViewById(R.layout.steparc_view);
+    }
+}
+
+//item2 的ViewHolder
+public static class Item2ViewHolder extends RecyclerView.ViewHolder {
+    TextView myview;
+
+    public Item2ViewHolder(View itemView) {
+        super(itemView);
+        myview = (TextView) itemView.findViewById(R.layout.list_item2);
+    }
+}
+</code></pre><p>}</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/07/19/problem/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/29/new-life/" class="archive-article-date">
-  	<time datetime="2017-06-29T00:25:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-29</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/29/new-life/">new life</a>
-    </h1>
+  
+    <a href="/2017/06/29/new-life/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">new life</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -245,8 +363,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -155,6 +155,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-problem" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/19/problem/">problem</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/19/problem/" class="archive-article-date">
+  	<time datetime="2017-07-19T07:41:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#RecycleView中的多item加载报空指针异常<br>package com.chrisbus.projibu.component;</p>
+<p>import android.content.Context;<br>import android.support.v7.widget.CardView;<br>import android.support.v7.widget.RecyclerView;<br>import android.view.LayoutInflater;<br>import android.view.View;<br>import android.view.ViewGroup;</p>
+<p>import android.widget.TextView;</p>
+<p>import com.chrisbus.projibu.R;</p>
+<p>public class JibuAdapter extends RecyclerView.Adapter<recyclerview.viewholder> {</recyclerview.viewholder></p>
+<p>   private  StepArcView term;<br>    //建立枚举 2个item 类型<br>    public enum ITEM_TYPE {<br>        ITEM1,<br>        ITEM2<br>    }</p>
+<pre><code>@Override
+public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parents, int viewType) {
+</code></pre><p>//加载Item View的时候根据不同TYPE加载不同的布局<br>        if (viewType == ITEM_TYPE.ITEM1.ordinal()) {<br>            return new Item1ViewHolder(LayoutInflater.from(parents.getContext()).inflate(R.layout.list_item, parents, false));<br>        } else {<br>            return new Item2ViewHolder(LayoutInflater.from(parents.getContext()).inflate(R.layout.list_item2, parents, false));<br>        }<br>//没有用inflate加载过的要用from方法<br>    }</p>
+<pre><code>@Override
+public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder instanceof Item1ViewHolder) {
+        ((Item1ViewHolder) holder).term.setCurrentCount(90, 10);
+    } else if (holder instanceof Item2ViewHolder) {
+        ((Item2ViewHolder) holder).myview.setText(&quot;ddad&quot;);
+    }
+
+
+
+}
+
+//设置ITEM类型，可以自由发挥，这里设置item position单数显示item1 偶数显示item2
+@Override
+public int getItemViewType(int position) {
+</code></pre><p>//Enum类提供了一个ordinal()方法，返回枚举类型的序数，这里ITEM_TYPE.ITEM1.ordinal()代表0， ITEM_TYPE.ITEM2.ordinal()代表1<br>        return position % 2 == 0 ? ITEM_TYPE.ITEM1.ordinal() : ITEM_TYPE.ITEM2.ordinal();<br>    }</p>
+<pre><code>@Override
+public int getItemCount() {
+    return 2;
+}
+
+//item1 的ViewHolder
+public static class Item1ViewHolder extends RecyclerView.ViewHolder {//用VIEWHOLDER对已经加载过的进行缓存
+       CardView myview;
+       StepArcView term;
+
+    public Item1ViewHolder(View itemView) {
+        super(itemView);
+        myview = (CardView) itemView.findViewById(R.layout.list_item);
+        term = (StepArcView) itemView.findViewById(R.layout.steparc_view);
+    }
+}
+
+//item2 的ViewHolder
+public static class Item2ViewHolder extends RecyclerView.ViewHolder {
+    TextView myview;
+
+    public Item2ViewHolder(View itemView) {
+        super(itemView);
+        myview = (TextView) itemView.findViewById(R.layout.list_item2);
+    }
+}
+</code></pre><p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/19/problem/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-new-life" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
